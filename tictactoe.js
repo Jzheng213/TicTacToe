@@ -31,7 +31,7 @@ function reset() {
 function checkWinner() {
   // check if current player has a winning hand
   // only start checking when player x has size number of selections
-  //test test
+
   let win = false;
   let playerSelections = [];
 
@@ -71,8 +71,44 @@ function checkWinner() {
   return win;
 }
 
-function clickCell(cell){
-	
+function clickCell(cell) {
+  if (currentPlayer === 0) {
+    cell.innerHTML = 'X';
+    player1Selections.push(parseInt(cell.id, 10));
+    player1Selections.sort((a, b) => a - b);
+  } else {
+    cell.innerHTML = 'O';
+    player2Selections.push(parseInt(cell.id, 10));
+    player2Selections.sort((a, b) => a - b);
+  }
+
+  move += 1;
+
+  const isWin = checkWinner();
+
+  if (isWin) {
+    if (currentPlayer === 0) {
+      points1 += 1;
+    } else {
+      points2 += 1;
+    }
+
+    document.getElementById('player1').innerHTML = points1;
+    document.getElementById('player2').innerHTML = points2;
+
+    reset();
+    drawBoard();
+  } else if (player2Selections.length + player1Selections.length === 9) {
+    reset();
+    drawBoard();
+  }
+  if (currentPlayer === 0) {
+    currentPlayer = 1;
+  } else {
+    currentPlayer = 0;
+  }
+
+  cell.removeEventListener('click', function () { clickCell(cell) },false);
 }
 
 
@@ -90,48 +126,7 @@ function drawBoard() {
     for (let x = 0; x < size; x += 1) {
       const col = document.createElement('td');
       col.id = counter;
-
-      const handler = function (e) {
-        if (currentPlayer === 0) {
-          this.innerHTML = 'X';
-          player1Selections.push(parseInt(this.id, 10));
-          player1Selections.sort((a, b) => a - b);
-        } else {
-          this.innerHTML = 'O';
-          player2Selections.push(parseInt(this.id, 10));
-          player2Selections.sort((a, b) => a - b);
-        }
-
-        move += 1;
-
-        const isWin = checkWinner();
-
-        if (isWin) {
-          if (currentPlayer === 0) {
-            points1 += 1;
-          } else {
-            points2 += 1;
-          }
-
-          document.getElementById('player1').innerHTML = points1;
-          document.getElementById('player2').innerHTML = points2;
-
-          reset();
-          drawBoard();
-        } else if (player2Selections.length + player1Selections.length === 9) {
-          reset();
-          drawBoard();
-        }
-        if (currentPlayer === 0) {
-          currentPlayer = 1;
-        } else {
-          currentPlayer = 0;
-        }
-
-        this.removeEventListener('click', arguments.callee);
-      };
-
-      col.addEventListener('click', handler);
+      col.addEventListener('click', function () { clickCell(this); }, false);
       row.appendChild(col);
       counter += 1;
     }
