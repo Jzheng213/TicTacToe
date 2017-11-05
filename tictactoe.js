@@ -108,7 +108,7 @@ function clickCell(cell) {
     currentPlayer = 0;
   }
 
-  cell.removeEventListener('click', function () { clickCell(cell) },false);
+  cell.removeEventListener('click', function () { clickCell(this) });
 }
 
 
@@ -126,7 +126,7 @@ function drawBoard() {
     for (let x = 0; x < size; x += 1) {
       const col = document.createElement('td');
       col.id = counter;
-      col.addEventListener('click', function () { clickCell(this); }, false);
+      col.addEventListener('click', function () { clickCell(this); });
       row.appendChild(col);
       counter += 1;
     }
