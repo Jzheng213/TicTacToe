@@ -71,14 +71,14 @@ function checkWinner() {
   return win;
 }
 
-function clickCell(cell) {
+function clickCell() {
   if (currentPlayer === 0) {
-    cell.innerHTML = 'X';
-    player1Selections.push(parseInt(cell.id, 10));
+    this.innerHTML = 'X';
+    player1Selections.push(parseInt(this.id, 10));
     player1Selections.sort((a, b) => a - b);
   } else {
-    cell.innerHTML = 'O';
-    player2Selections.push(parseInt(cell.id, 10));
+    this.innerHTML = 'O';
+    player2Selections.push(parseInt(this.id, 10));
     player2Selections.sort((a, b) => a - b);
   }
 
@@ -108,7 +108,7 @@ function clickCell(cell) {
     currentPlayer = 0;
   }
 
-  cell.removeEventListener('click', function () { clickCell(this) });
+  this.removeEventListener('click', clickCell);
 }
 
 
@@ -126,7 +126,7 @@ function drawBoard() {
     for (let x = 0; x < size; x += 1) {
       const col = document.createElement('td');
       col.id = counter;
-      col.addEventListener('click', function () { clickCell(this); });
+      col.addEventListener('click', clickCell);
       row.appendChild(col);
       counter += 1;
     }
